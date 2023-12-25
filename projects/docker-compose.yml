@@ -1,5 +1,4 @@
-version: "3.9"
-
+version: "3"
 services:
   broker-service:
     build:
@@ -11,3 +10,48 @@ services:
     deploy:
       mode: replicated
       replicas: 1
+    networks:
+      - go-microservices
+
+  auth-service:
+    build:
+      context: ./../auth-service
+      dockerfile: ./../auth-service/auth-service.dockerfile
+    ports:
+      - 8081:80
+    restart: always
+    deploy:
+      mode: replicated
+      replicas: 1
+    environment:
+      DSN: "postgresql://terajari:dbpass@postgres/users?sslmode=disable"
+    depends_on:
+      - postgres
+    networks:
+      - go-microservices
+
+  postgres:
+    image: postgres:alpine
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: terajari
+      POSTGRES_PASSWORD: dbpass
+      POSTGRES_DB: users
+      POSTGRES_HOST_AUTH_METHOD: trust
+    deploy:
+      mode: replicated
+      replicas: 1
+    volumes:
+      - postgres-data:/var/lib/postgresql/data/
+    networks:
+      - go-microservices
+    command: postgres -c listen_addresses='*'
+
+volumes:
+  postgres-data:
+
+networks:
+  go-microservices:
+    driver: bridge

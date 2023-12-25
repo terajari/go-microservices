@@ -1,9 +1,10 @@
 BROKER_BINARY=brokerApp
+AUTH_BINARY=authApp
 
 up:
 	@echo "Starting broker"
 	docker compose up -d
-	@echo "Broker started"
+	@echo "Docker images started"
 
 down:
 	@echo "Stopping docker compose..."
@@ -15,7 +16,12 @@ build_broker:
 	cd ../broker-service && env GOOS=linux CGO_ENABLED=0 go build -o ${BROKER_BINARY} ./cmd/api
 	@echo "Done!"
 
-up_build: build_broker
+build_auth:
+	@echo "Building auth"
+	cd ../auth-service && env GOOS=linux CGO_ENABLED=0 go build -o ${AUTH_BINARY} ./cmd/api
+	@echo "Done!"
+
+up_build: build_broker build_auth
 	@echo "Stopping docker images (if running...)"
 	docker-compose down
 	@echo "Building (when required) and starting docker images..."
