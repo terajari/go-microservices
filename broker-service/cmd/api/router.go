@@ -17,6 +17,7 @@ func (app *Application) routes() *gin.Engine {
 	}))
 
 	router.POST("/broker", app.Broker)
+	router.POST("/handle", app.HandleSubmission)
 
 	return router
 }
