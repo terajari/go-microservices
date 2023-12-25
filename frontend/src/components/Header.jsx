@@ -9,7 +9,11 @@ const Header = ({output, setOutput, setReceived, setPayload}) => {
             <div className='col'>
                 <h1>Go Microservices</h1>
                 <hr />
-                <Button name='Broker Service' setOutput={setOutput} setReceived={setReceived} setPayload={setPayload} />
+                <div className='d-flex justify-content-center gap-3'>
+                    <Button name='Broker Service' url='http://localhost:8080/broker' setOutput={setOutput} setReceived={setReceived} setPayload={setPayload} />
+                    <Button name='Auth Service' url='http://localhost:8080/handle' setOutput={setOutput} setReceived={setReceived} setPayload={setPayload} />
+                </div>
+                
                 <div className='mt-5' style={{outline: '1px solid #ccc', padding: "2em"}}>
                     <span className='text-muted'>
                         {output ? output : "Hasil di sini..."}
